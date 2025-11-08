@@ -1,0 +1,131 @@
+/* Global */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: "Poppins", sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  transition: all 0.4s ease;
+}
+
+:root {
+  --bayern-red: #b50000;
+  --accent: #ffcc00;
+  --bg: #121212;
+  --text: #fff;
+  --card-bg: rgba(255,255,255,0.1);
+  --shadow: rgba(0,0,0,0.3);
+}
+
+body.light {
+  --bg: #f8f8f8;
+  --text: #222;
+  --card-bg: #fff;
+  --shadow: rgba(0,0,0,0.1);
+}
+
+/* Header */
+header {
+  text-align: center;
+  padding: 20px;
+  background: var(--bayern-red);
+  color: white;
+}
+
+.controls {
+  margin-top: 15px;
+}
+
+#searchBar, #categoryFilter, #themeToggle {
+  padding: 10px;
+  border-radius: 6px;
+  border: none;
+  margin: 5px;
+  font-size: 1em;
+}
+
+#themeToggle {
+  cursor: pointer;
+  background: var(--accent);
+  color: #000;
+  font-weight: bold;
+}
+
+/* Loader */
+.loader {
+  border: 6px solid rgba(255,255,255,0.2);
+  border-top: 6px solid var(--bayern-red);
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  animation: spin 1s linear infinite;
+  margin: 80px auto;
+}
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* News grid */
+.news-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+  padding: 30px;
+}
+
+.news-card {
+  background: var(--card-bg);
+  border-radius: 10px;
+  box-shadow: 0 5px 15px var(--shadow);
+  overflow: hidden;
+  cursor: pointer;
+  opacity: 0;
+  animation: fadeIn 0.6s forwards;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.news-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 8px 20px var(--shadow);
+}
+
+.news-card img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+}
+
+.news-content {
+  padding: 15px;
+}
+.news-content h2 {
+  font-size: 1.1rem;
+  margin-bottom: 6px;
+}
+.news-content p {
+  font-size: 0.9rem;
+  color: var(--text);
+  opacity: 0.8;
+}
+@keyframes fadeIn {
+  to { opacity: 1; }
+}
+
+@keyframes zoomIn {
+  from { transform: scale(0.9); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+/* Footer */
+footer {
+  text-align: center;
+  padding: 15px;
+  background: var(--bayern-red);
+  color: white;
+  margin-top: auto;
+}
+
+

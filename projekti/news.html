@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bayern Munich News Portal 2.0</title>
+  <link rel="stylesheet" href="news.css" />
+</head>
+<body>
+  <header>
+    <h1>⚽ Bayern Munich News Portal 2.0</h1>
+    <div class="controls">
+      <input type="text" id="searchBar" placeholder="Search Bayern news..." />
+      <select id="categoryFilter">
+        <option value="all">All</option>
+        <option value="transfers">Transfers</option>
+        <option value="champions-league">Champions League</option>
+        <option value="club">Club</option>
+      </select>
+      <button id="themeToggle">🌙 Dark</button>
+    </div>
+  </header>
+
+  <main>
+    <div id="loader" class="loader"></div>
+    <div id="newsContainer" class="news-grid"></div>
+  </main>
+  <!-- Modal -->
+  <div id="modal" class="modal hidden">
+    <div class="modal-content">
+
+      <img src="" alt="">
+      <h2 id="modalTitle"></h2>
+      <p id="modalSummary"></p>
+      <a id="modalLink" href="#" target="_blank">Read full article →</a>
+    </div>
+  </div>
+  
+  
+  <footer>
+    <p>Made with ❤️ by a Bayern Fan • Live Updates Enabled</p>
+  </footer>
+
+  <script src="news.js"></script>
+</body>
+</html>
+
+

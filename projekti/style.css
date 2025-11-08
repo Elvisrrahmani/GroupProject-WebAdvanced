@@ -1,0 +1,182 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Poppins", sans-serif;
+  color: #111;
+  background: #fff;
+  overflow-x: hidden;
+  transition: background 0.4s, color 0.4s;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background: #d50032;
+  color: #fff;
+}
+
+.logo-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo {
+  width: 60px;
+}
+
+#themeToggle {
+  padding: 0.6rem 1.2rem;
+  border: none;
+  background: #fff;
+  color: #d50032;
+  font-weight: bold;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+#themeToggle:hover {
+  transform: scale(1.05);
+}
+
+/* HERO SECTION */
+.hero {
+  background: url('https://upload.wikimedia.org/wikipedia/commons/5/56/Allianz_Arena_2013.jpg') center/cover no-repeat;
+  height: 80vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  position: relative;
+  text-align: center;
+  animation: fadeIn 2s ease-in;
+}
+
+.hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+}
+
+.hero-text {
+  position: relative;
+  z-index: 2;
+}
+
+.hero h2 {
+  font-size: 3rem;
+  margin-bottom: 0.5rem;
+}
+
+#countdown {
+  margin-top: 1rem;
+}
+
+.timer span {
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+/* CAROUSEL */
+.carousel {
+  text-align: center;
+  padding: 3rem 0;
+  background: #f9f9f9;
+}
+
+.carousel-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  position: relative;
+  overflow: hidden;
+  width: 90%;
+  margin: auto;
+}
+
+.carousel-track {
+  display: flex;
+  transition: transform 0.5s ease-in-out;
+}
+
+.carousel-track img {
+  width: 250px;
+  height: 300px;
+  object-fit: cover;
+  border-radius: 10px;
+  margin: 0 10px;
+}
+
+.prev, .next {
+  background: #d50000;
+  border: none;
+  color: white;
+  font-size: 2rem;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  border-radius: 10px;
+  transition: 0.3s;
+}
+
+.prev:hover, .next:hover {
+  background: #9c0023;
+}
+
+/* SCROLL TO TOP */
+#scrollTop {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: #d50032;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  font-size: 1.5rem;
+  width: 45px;
+  height: 45px;
+  cursor: pointer;
+  display: none;
+  transition: 0.3s;
+}
+
+#scrollTop:hover {
+  transform: scale(1.1);
+}
+
+/* DARK MODE */
+.dark-mode {
+  background: #111;
+  color: #fff;
+}
+
+.dark-mode header, .dark-mode footer {
+  background: #333;
+}
+
+.dark-mode #themeToggle {
+  background: #d50000;
+  color: white;
+}
+
+/* FOOTER */
+footer {
+  text-align: center;
+  padding: 1rem;
+  background: #d50000;
+  color: #fff;
+  margin-top: 2rem;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
