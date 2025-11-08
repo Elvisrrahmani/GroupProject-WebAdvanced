@@ -20,7 +20,13 @@ body {
   --card-bg: rgba(255,255,255,0.1);
   --shadow: rgba(0,0,0,0.3);
 }
-
+a{
+  text-decoration: none;
+  color: #f8f8f8;
+  font-weight: 500;
+  margin-left: 20px;
+  text-align: left;
+}
 body.light {
   --bg: #f8f8f8;
   --text: #222;
