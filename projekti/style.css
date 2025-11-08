@@ -30,7 +30,12 @@ header {
 .logo {
   width: 60px;
 }
-
+a{
+  text-decoration: none;
+  color: white;
+  font-weight: 500;
+  margin-left: 20px;
+}
 #themeToggle {
   padding: 0.6rem 1.2rem;
   border: none;
