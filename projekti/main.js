@@ -11,57 +11,50 @@ themeBtn.addEventListener("click", () => {
 const matchDate = new Date("December 15, 2025 18:30:00").getTime();
 
 function updateCountdown() {
-  const now = new Date().getTime();
+  const now = Date.now();
   const gap = matchDate - now;
 
+  if (gap < 0) return;
+
+  const day = 1000 * 60 * 60 * 24;
+  const hour = 1000 * 60 * 60;
+  const minute = 1000 * 60;
   const second = 1000;
-  const minute = second * 60;
-  const hour = minute * 60;
-  const day = hour * 24;
 
-  const days = Math.floor(gap / day);
-  const hours = Math.floor((gap % day) / hour);
-  const minutes = Math.floor((gap % hour) / minute);
-  const seconds = Math.floor((gap % minute) / second);
-
-  document.getElementById("days").textContent = days;
-  document.getElementById("hours").textContent = hours;
-  document.getElementById("minutes").textContent = minutes;
-  document.getElementById("seconds").textContent = seconds;
+  document.getElementById("days").textContent = Math.floor(gap / day);
+  document.getElementById("hours").textContent = Math.floor((gap % day) / hour);
+  document.getElementById("minutes").textContent = Math.floor((gap % hour) / minute);
+  document.getElementById("seconds").textContent = Math.floor((gap % minute) / second);
 }
+
 setInterval(updateCountdown, 1000);
 
-// 🎠 IMAGE CAROUSEL
+// 🎠 CAROUSEL
 const track = document.querySelector(".carousel-track");
-const nextBtn = document.querySelector(".next");
 const prevBtn = document.querySelector(".prev");
+const nextBtn = document.querySelector(".next");
 
 let index = 0;
-const slideWidth = 270; // image + margin
+const slides = document.querySelectorAll(".carousel-track img");
+const slideWidth = slides[0].offsetWidth + 20; // margin included
 
 nextBtn.addEventListener("click", () => {
-  index++;
-  if (index > 3) index = 0;
+  index = (index + 1) % slides.length;
   track.style.transform = `translateX(-${index * slideWidth}px)`;
 });
 
 prevBtn.addEventListener("click", () => {
-  index--;
-  if (index < 0) index = 3;
+  index = (index - 1 + slides.length) % slides.length;
   track.style.transform = `translateX(-${index * slideWidth}px)`;
 });
 
-// ⬆️ SCROLL TO TOP BUTTON
-const scrollTopBtn = document.getElementById("scrollTop");
+// ⬆️ SCROLL TO TOP
+const scrollBtn = document.getElementById("scrollTop");
 
 window.addEventListener("scroll", () => {
-  if (window.scrollY > 200) {
-    scrollTopBtn.style.display = "block";
-  } else {
-    scrollTopBtn.style.display = "none";
-  }
+  scrollBtn.style.display = window.scrollY > 250 ? "block" : "none";
 });
 
-scrollTopBtn.addEventListener("click", () => {
+scrollBtn.addEventListener("click", () => {
   window.scrollTo({ top: 0, behavior: "smooth" });
 });

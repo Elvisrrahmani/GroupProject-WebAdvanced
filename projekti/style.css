@@ -12,11 +12,12 @@ body {
   transition: background 0.4s, color 0.4s;
 }
 
+/* HEADER */
 header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem 2rem;
+  padding: 1.2rem 2rem;
   background: #d50032;
   color: #fff;
 }
@@ -28,47 +29,52 @@ header {
 }
 
 .logo {
-  width: 60px;
+  width: 55px;
 }
-a{
+
+nav a {
   text-decoration: none;
   color: white;
-  font-weight: 500;
   margin-left: 20px;
+  font-weight: 600;
 }
+
+nav a.active {
+  border-bottom: 2px solid white;
+}
+
 #themeToggle {
   padding: 0.6rem 1.2rem;
   border: none;
   background: #fff;
   color: #d50032;
-  font-weight: bold;
   border-radius: 8px;
   cursor: pointer;
   transition: 0.3s;
+  font-weight: bold;
 }
 
 #themeToggle:hover {
-  transform: scale(1.05);
+  opacity: 0.8;
 }
 
-/* HERO SECTION */
+/* HERO */
 .hero {
-  background: url('https://upload.wikimedia.org/wikipedia/commons/5/56/Allianz_Arena_2013.jpg') center/cover no-repeat;
+  background: url("https://upload.wikimedia.org/wikipedia/commons/5/56/Allianz_Arena_2013.jpg") center/cover no-repeat;
   height: 80vh;
   display: flex;
   justify-content: center;
   align-items: center;
+  text-align: center;
   color: white;
   position: relative;
-  text-align: center;
-  animation: fadeIn 2s ease-in;
 }
 
 .hero::after {
   content: "";
   position: absolute;
   inset: 0;
-  background: rgba(0, 0, 0, 0.6);
+  background: rgba(0,0,0,0.6);
 }
 
 .hero-text {
@@ -81,75 +87,64 @@ a{
   margin-bottom: 0.5rem;
 }
 
-#countdown {
-  margin-top: 1rem;
-}
-
-.timer span {
-  font-weight: bold;
-  font-size: 1.2rem;
-}
-
 /* CAROUSEL */
 .carousel {
-  text-align: center;
   padding: 3rem 0;
-  background: #f9f9f9;
+  background: #f3f3f3;
+  text-align: center;
 }
 
 .carousel-container {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 1rem;
   position: relative;
-  overflow: hidden;
   width: 90%;
   margin: auto;
 }
 
 .carousel-track {
   display: flex;
-  transition: transform 0.5s ease-in-out;
+  gap: 20px;
+  overflow: hidden;
+  transition: transform 0.4s ease;
 }
 
 .carousel-track img {
   width: 250px;
   height: 300px;
   object-fit: cover;
-  border-radius: 10px;
-  margin: 0 10px;
+  border-radius: 12px;
 }
 
 .prev, .next {
-  background: #d50000;
+  background: #d50032;
   border: none;
   color: white;
   font-size: 2rem;
   padding: 0.5rem 1rem;
   cursor: pointer;
   border-radius: 10px;
-  transition: 0.3s;
 }
 
 .prev:hover, .next:hover {
-  background: #9c0023;
+  opacity: 0.8;
 }
 
-/* SCROLL TO TOP */
+/* SCROLL TOP BUTTON */
 #scrollTop {
   position: fixed;
-  bottom: 20px;
-  right: 20px;
+  bottom: 25px;
+  right: 25px;
   background: #d50032;
   color: white;
   border: none;
   border-radius: 50%;
   font-size: 1.5rem;
-  width: 45px;
-  height: 45px;
-  cursor: pointer;
+  width: 47px;
+  height: 47px;
   display: none;
+  cursor: pointer;
   transition: 0.3s;
 }
 
@@ -159,29 +154,66 @@ a{
 
 /* DARK MODE */
 .dark-mode {
-  background: #111;
-  color: #fff;
+  background: #121212;
+  color: #eee;
 }
 
-.dark-mode header, .dark-mode footer {
-  background: #333;
+.dark-mode header,
+.dark-mode footer {
+  background: #222;
 }
 
 .dark-mode #themeToggle {
-  background: #d50000;
-  color: white;
+  background: #d50032;
+  color: #fff;
 }
 
 /* FOOTER */
 footer {
+  background: #d50032;
+  color: white;
   text-align: center;
-  padding: 1rem;
-  background: #d50000;
-  color: #fff;
-  margin-top: 2rem;
+  padding: 1.2rem;
+  margin-top: 3rem;
+}
+/* NEW ANIMATION */
+@keyframes slideUpFade {
+  0% {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+.hero-text {
+  animation: slideUpFade 1.5s ease-out;
+}
+.carousel-track img:hover {
+  transform: scale(1.07);
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.6);
+  transition: 0.3s ease;
+}
+/* Nav fade-in */
+@keyframes navFade {
+  0% { opacity: 0; transform: translateY(-10px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+nav a {
+  animation: navFade 1s ease forwards;
+  animation-delay: 0.3s;
+}
+/* Timer glow */
+@keyframes pulseGlow {
+  0% { text-shadow: 0 0 5px #d50032; }
+  50% { text-shadow: 0 0 15px #ff003c; }
+  100% { text-shadow: 0 0 5px #d50032; }
+}
+
+.timer span {
+  animation: pulseGlow 2s infinite;
+  font-size: 1.4rem;
 }
