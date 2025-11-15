@@ -57,6 +57,47 @@ body {
 .header nav a.active {
   border-bottom: 2px solid black;
 }
+/* ---------------------------------
+   Dark Mode Variables
+--------------------------------- */
+.dark-mode {
+  --light: #111;      /* body background */
+  --dark: #f5f5f5;    /* text color */
+  --gray: #ccc;       /* paragraph text */
+  --red: #b30000;     /* darker red variant for header */
+}
+
+/* Extra component adjustments */
+.dark-mode .header {
+  background: var(--red);
+}
+
+.dark-mode .header nav a {
+  color: var(--dark);
+}
+
+.dark-mode .hero {
+  filter: brightness(0.7);
+}
+.dark-mode .footer {
+  background: #000;
+}
+.dark-toggle {
+  background: #000;
+  color: #fff;
+  border: none;
+  padding: 6px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  margin-left: 16px;
+}
+
+.header .container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
 
 /* Hero section */
 .hero {
