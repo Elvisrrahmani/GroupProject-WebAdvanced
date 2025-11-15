@@ -16,6 +16,35 @@ const appearOnScroll = new IntersectionObserver(function(entries, observer){
 faders.forEach(fade => {
   appearOnScroll.observe(fade);
 });
+// darkmode.js
+
+document.addEventListener("DOMContentLoaded", () => {
+    const toggle = document.getElementById("darkModeToggle");
+    const body = document.body;
+
+    // Load saved mode from localStorage
+    const savedMode = localStorage.getItem("darkMode");
+
+    if (savedMode === "enabled") {
+        body.classList.add("dark-mode");
+        if (toggle) toggle.textContent = "☀️ Light Mode";
+    }
+
+    // Toggle dark mode on click
+    if (toggle) {
+        toggle.addEventListener("click", () => {
+            body.classList.toggle("dark-mode");
+
+            if (body.classList.contains("dark-mode")) {
+                localStorage.setItem("darkMode", "enabled");
+                toggle.textContent = "☀️ Light Mode";
+            } else {
+                localStorage.setItem("darkMode", "disabled");
+                toggle.textContent = "🌙 Dark Mode";
+            }
+        });
+    }
+});
 
 // Butoni "Kthehu lart"
 const topBtn = document.getElementById("topBtn");
