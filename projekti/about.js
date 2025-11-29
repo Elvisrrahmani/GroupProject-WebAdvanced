@@ -45,6 +45,19 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 });
+const elements = document.querySelectorAll('.fade-in');
+
+function checkFadeIn() {
+  elements.forEach(el => {
+    const rect = el.getBoundingClientRect().top;
+    if (rect < window.innerHeight - 50) {
+      el.classList.add('visible');
+    }
+  });
+}
+
+window.addEventListener('scroll', checkFadeIn);
+window.addEventListener('load', checkFadeIn);
 
 // Butoni "Kthehu lart"
 const topBtn = document.getElementById("topBtn");

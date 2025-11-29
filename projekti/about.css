@@ -67,6 +67,23 @@ body {
   --red: #b30000;     /* darker red variant for header */
 }
 
+.bayern-bg {
+  background: linear-gradient(120deg, #c80000, #ffffff, #c80000);
+  background-size: 200% 200%;
+  animation: moveGradient 6s ease infinite;
+  text-align: center;
+  color: #b30000;
+}
+
+@keyframes moveGradient {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+
+
+
 /* Extra component adjustments */
 .dark-mode .header {
   background: var(--red);
