@@ -26,6 +26,33 @@
       <button id="themeToggle">🌙 Dark</button>
     </div>
   </header>
+  
+  <div class="counter" id="titleCount">0 / 50</div>
+<div class="image-preview-wrap">
+  <img id="imgPreview" class="image-preview" src="" alt="">
+</div>
+<div class="counter" id="summaryCount">0 / 300</div>
+
+<h2 style="text-align:center;margin-top:20px;">📝 Submit Your Bayern News</h2>
+
+<form id="newsForm" class="news-form">
+  <input type="text" id="formTitle" placeholder="Title..." required>
+  
+  <select id="formCategory" required>
+    <option value="">Select Category</option>
+    <option value="club">Club</option>
+    <option value="transfers">Transfers</option>
+    <option value="champions-league">Champions League</option>
+  </select>
+
+  <input type="text" id="formImg" placeholder="Image URL...">
+  
+  <textarea id="formSummary" placeholder="Short summary..." required></textarea>
+
+  <button type="submit">Add News</button>
+
+  <p id="formError" class="error-msg"></p>
+</form>
 
   <main>
     <div id="loader" class="loader"></div>

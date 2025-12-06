@@ -171,3 +171,69 @@ footer {
     opacity: 0.7;
   transition: 0.3;
 }
+.news-form {
+  width: 80%;
+  max-width: 600px;
+  margin: 20px auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.news-form input,
+.news-form select,
+.news-form textarea {
+  padding: 10px;
+  border-radius: 8px;
+  border: 2px solid #ddd;
+  font-size: 1rem;
+}
+
+.news-form button {
+  background: var(--bayern-red);
+  color: white;
+  padding: 12px;
+  border-radius: 8px;
+  border: none;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.news-form button:hover {
+  background: #7a0000;
+}
+
+.error-msg {
+  color: #ff4b4b;
+  font-weight: bold;
+  text-align: center;
+  display: none;
+}
+.counter {
+  font-size: 0.9rem;
+  margin-top: -8px;
+  text-align: right;
+  opacity: 0.7;
+}
+
+.counter.invalid {
+  color: #ff3e3e;
+  font-weight: bold;
+}
+
+.image-preview-wrap {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.image-preview {
+  width: 180px;
+  height: 120px;
+  object-fit: cover;
+  margin: 8px 0;
+  border-radius: 8px;
+  display: none;
+  border: 2px solid #ccc;
+}
