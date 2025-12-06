@@ -73,3 +73,82 @@ window.addEventListener("scroll", () => {
 topBtn.addEventListener("click", () => {
   window.scrollTo({ top: 0, behavior: "smooth" });
 });
+
+// jQuery (Load from CDN automatically if not included)
+if (!window.jQuery) {
+  let script = document.createElement("script");
+  script.src = "https://code.jquery.com/jquery-3.7.1.min.js";
+  document.head.appendChild(script);
+}
+
+// Bayern player list for validation (ARRAY + CONDITIONALS)
+const validPlayers = [
+  "Musiala", "Kimmich", "Neuer", "Kane", "Müller", "Davies", "Sane"
+];
+
+// Regex rules
+const nameRegex = /^[A-Za-z\s]{3,}$/;
+const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z]+\.[A-Za-z]{2,}$/;
+
+// Form logic
+$(document).on("submit", "#feedbackForm", function (e) {
+  e.preventDefault();
+
+  let name = $("#fullName").val().trim();
+  let email = $("#email").val().trim();
+  let player = $("#player").val().trim();
+  let message = $("#message").val().trim();
+
+  let isValid = true;
+
+  // Name validation + input manipulation
+  if (!nameRegex.test(name)) {
+    $("#fullName").next(".error").text("Name must be at least 3 letters.");
+    isValid = false;
+  } else {
+    // Capitalize name fully
+    name = name.toUpperCase();
+    $("#fullName").val(name);
+    $("#fullName").next(".error").text("");
+  }
+
+  // Email regex
+  if (!emailRegex.test(email)) {
+    $("#email").next(".error").text("Invalid email format.");
+    isValid = false;
+  } else {
+    $("#email").next(".error").text("");
+  }
+
+  // Player check (array + conditional)
+  if (!validPlayers.includes(player)) {
+    $("#player").next(".error").text("Player not found in Bayern squad!");
+    isValid = false;
+  } else {
+    $("#player").next(".error").text("");
+  }
+
+  // Message length
+  if (message.length < 5) {
+    $("#message").next(".error").text("Message must be 5+ characters.");
+    isValid = false;
+  } else {
+    $("#message").next(".error").text("");
+  }
+
+  // Final success
+  if (isValid) {
+    $("#successMsg").fadeIn();
+    setTimeout(() => $("#successMsg").fadeOut(), 2000);
+
+    // Store feedback (array example)
+    const feedback = {
+      name,
+      email,
+      player,
+      message
+    };
+
+    console.log("Saved Feedback:", feedback);
+  }
+});
