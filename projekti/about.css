@@ -123,11 +123,12 @@ body {
   text-align: center;
   padding: 80px 16px;
 }
-.hero-text h1 {
-  font-size: 42px;
-  margin-bottom: 10px;
-  text-shadow: 0 4px 12px rgba(0,0,0,0.4);
+.dark-mode .hero-text h1,
+.dark-mode .hero-text p {
+  color: #fff !important;
+  text-shadow: 0 0 10px rgba(0,0,0,0.8);
 }
+
 .hero-text p {
   font-size: 18px;
 }
@@ -162,6 +163,94 @@ body {
   border-radius: 10px;
   height: 200px;
   object-fit: cover;
+}
+
+.feedback-section {
+  background: var(--light);
+  padding: 30px;
+  border-radius: 12px;
+  margin-top: 40px;
+  box-shadow: 0 0 15px rgba(0,0,0,0.08);
+  color: var(--dark);
+}
+
+.form-title {
+  text-align: center;
+  color: var(--red);
+  margin-bottom: 20px;
+}
+
+.feedback-form {
+  display: grid;
+  gap: 18px;
+}
+
+.form-group label {
+  font-weight: 600;
+  margin-bottom: 4px;
+  display: block;
+  color: var(--dark);
+}
+
+.feedback-form input,
+.feedback-form textarea {
+  width: 100%;
+  padding: 10px;
+  border: 2px solid var(--gray);
+  border-radius: 6px;
+  font-size: 16px;
+  background: var(--light);
+  color: var(--dark);
+}
+
+.feedback-form input:focus,
+.feedback-form textarea:focus {
+  border-color: var(--red);
+}
+
+.error {
+  color: red;
+  font-size: 14px;
+  height: 16px;
+}
+
+.btn-submit {
+  background: var(--red);
+  border: none;
+  color: white;
+  padding: 12px;
+  font-size: 17px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.btn-submit:hover {
+  background: #b30000;
+}
+
+/* Improve dark mode readability */
+.dark-mode .feedback-section {
+  box-shadow: 0 0 15px rgba(255,255,255,0.1);
+}
+
+.dark-mode .error {
+  color: #ff5a5a;
+}
+
+.btn-submit {
+  background: var(--red);
+  border: none;
+  color: white;
+  padding: 12px;
+  font-size: 17px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.btn-submit:hover {
+  background: #b30000;
 }
 
 /* Footer */
