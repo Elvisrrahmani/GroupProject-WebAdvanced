@@ -315,3 +315,80 @@ footer {
 @media (max-width: 700px) {
   .fan-form { width: 90%; padding: 20px; }
 }
+/* ----------- PAGE FADE-IN ----------- */
+body {
+  animation: fadeInPage 1s ease-out;
+}
+
+@keyframes fadeInPage {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* ----------- NAV UNDERLINE ANIMATION ----------- */
+nav a {
+  position: relative;
+}
+
+nav a::after {
+  content: "";
+  position: absolute;
+  bottom: -3px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: white;
+  transition: width 0.3s;
+}
+
+nav a:hover::after {
+  width: 100%;
+}
+
+/* ---------- SCROLL REVEAL EFFECT ---------- */
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: 0.7s ease-out;
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Make sections reveal on scroll */
+.hero,
+.card,
+.carousel,
+.fan-form {
+  position: relative;
+}
+
+.hero.reveal.visible,
+.card.reveal.visible,
+.carousel.reveal.visible,
+.fan-form.reveal.visible {
+  opacity: 1;
+}
+
+/* ---------- DARK MODE FIX FOR CARDS ---------- */
+.dark-mode .front {
+  background: #333;
+  color: #fff;
+}
+
+.dark-mode .back {
+  background: #900;
+  color: #fff;
+}
+
+/* ---------- DARK MODE FIX FOR CAROUSEL BACKGROUND ---------- */
+.dark-mode .carousel {
+  background: #111;
+}
+
+/* ---------- DARK MODE FIX FOR HERO OVERLAY ---------- */
+.dark-mode .hero::after {
+  background: rgba(0,0,0,0.7);
+}

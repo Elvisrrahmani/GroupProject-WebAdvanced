@@ -1,10 +1,20 @@
-// 🌗 THEME TOGGLE
+// 🌗 THEME TOGGLE + SAVE THEME
 const themeBtn = document.getElementById("themeToggle");
+
+// Load saved theme
+if (localStorage.getItem("theme") === "dark") {
+  document.body.classList.add("dark-mode");
+  themeBtn.textContent = "☀️ Light Mode";
+}
+
 themeBtn.addEventListener("click", () => {
   document.body.classList.toggle("dark-mode");
-  themeBtn.textContent = document.body.classList.contains("dark-mode")
-    ? "☀️ Light Mode"
-    : "🌙 Dark Mode";
+
+  const isDark = document.body.classList.contains("dark-mode");
+  themeBtn.textContent = isDark ? "☀️ Light Mode" : "🌙 Dark Mode";
+
+  // Save preference
+  localStorage.setItem("theme", isDark ? "dark" : "light");
 });
 
 // ⏱ COUNTDOWN
@@ -29,24 +39,34 @@ function updateCountdown() {
 
 setInterval(updateCountdown, 1000);
 
-// 🎠 CAROUSEL
+// 🎠 CAROUSEL + AUTO-SLIDE
 const track = document.querySelector(".carousel-track");
 const prevBtn = document.querySelector(".prev");
 const nextBtn = document.querySelector(".next");
 
 let index = 0;
 const slides = document.querySelectorAll(".carousel-track img");
-const slideWidth = slides[0].offsetWidth + 20; // margin included
+
+function updateCarousel() {
+  const slideWidth = slides[0].offsetWidth + 20;
+  track.style.transform = `translateX(-${index * slideWidth}px)`;
+}
 
 nextBtn.addEventListener("click", () => {
   index = (index + 1) % slides.length;
-  track.style.transform = `translateX(-${index * slideWidth}px)`;
+  updateCarousel();
 });
 
 prevBtn.addEventListener("click", () => {
   index = (index - 1 + slides.length) % slides.length;
-  track.style.transform = `translateX(-${index * slideWidth}px)`;
+  updateCarousel();
 });
+
+// Auto-slide every 3 seconds
+setInterval(() => {
+  index = (index + 1) % slides.length;
+  updateCarousel();
+}, 3000);
 
 // ⬆️ SCROLL TO TOP
 const scrollBtn = document.getElementById("scrollTop");
@@ -60,8 +80,6 @@ scrollBtn.addEventListener("click", () => {
 });
 
 // ---------------- FAN FORM ----------------
-
-// Regex patterns
 const nameRegex = /^[A-Za-z ]{3,20}$/;
 const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-z]+\.[a-z]{2,4}$/;
 
@@ -70,16 +88,13 @@ const fanForm = document.getElementById("fanForm");
 fanForm.addEventListener("submit", function (e) {
   e.preventDefault();
 
-  // Get values
   let nameValue = document.getElementById("nameInput").value.trim();
   let emailValue = document.getElementById("emailInput").value.trim();
   let playerValue = document.getElementById("playerInput").value.trim();
 
-  // Manipulate input values (auto-capitalize)
   nameValue = nameValue.charAt(0).toUpperCase() + nameValue.slice(1);
   playerValue = playerValue.toUpperCase();
 
-  // Validate name + email
   if (!nameRegex.test(nameValue)) {
     $("#formMessage").text("❌ Name must have 3–20 letters!");
     return;
@@ -90,19 +105,13 @@ fanForm.addEventListener("submit", function (e) {
     return;
   }
 
-  // Array with known Bayern players
   const players = ["KIMMICH", "KANE", "MUSIALA", "NEUER", "GNABRY", "DAVIES"];
 
-  // Conditional + array check
-  let message = "";
-
-  if (players.includes(playerValue)) {
-    message = `🔥 ${playerValue} is a TOP Bayern player!`;
-  } else {
-    message = `👌 ${playerValue} is not in our list, but still cool!`;
-  }
+  let message = players.includes(playerValue)
+    ? `🔥 ${playerValue} is a TOP Bayern player!`
+    : `👌 ${playerValue} is not in our list, but still cool!`;
 
   $("#formMessage").text(`✔️ Welcome, ${nameValue}! ${message}`);
 });
 
-document.body.classList.toggle("dark-mode")
+// document.body.classList.toggle("dark-mode")
