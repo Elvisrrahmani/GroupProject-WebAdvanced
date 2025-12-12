@@ -2,7 +2,11 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+}
+
+img {
   max-width: 100%;
+  display: block; /* Removes bottom spacing on images */
 }
 
 body {
@@ -31,6 +35,7 @@ header {
 
 .logo {
   width: 55px;
+  height: auto;
 }
 
 nav a {
@@ -117,9 +122,14 @@ nav a.active {
   transition: transform 0.7s;
   transform-style: preserve-3d;
   position: relative;
+  cursor: pointer;
 }
 
-.card:hover .inner { transform: rotateY(180deg); }
+.card:hover .inner { 
+    /* removed global hover to allow individual flipping if desired, 
+       but keeping original logic: */
+}
+.inner:hover { transform: rotateY(180deg); }
 
 .front, .back {
   position: absolute;
@@ -127,6 +137,25 @@ nav a.active {
   height: 100%;
   backface-visibility: hidden;
   border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+.front img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.front h3 {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  background: rgba(213, 0, 50, 0.8);
+  color: white;
+  text-align: center;
+  padding: 10px;
+  margin: 0;
 }
 
 .back {
@@ -134,29 +163,40 @@ nav a.active {
   background: #d4001d;
   color: white;
   padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
 }
+
+/* --- START REPLACEMENT CODE --- */
 
 /* Carousel */
 .carousel {
   padding: 3rem 0;
   background: #f3f3f3;
   text-align: center;
+  margin-top: 80px;
+  transition: background 0.4s;
 }
 
 .carousel-container {
   display: flex;
   align-items: center;
-  justify-content: center;
+  /* CRITICAL: Use margin auto to center the whole container */
   position: relative;
   width: 90%;
-  margin: auto;
+  max-width: 1000px;
+  margin: 0 auto; 
+  overflow: hidden; 
 }
 
 .carousel-track {
   display: flex;
   gap: 20px;
-  overflow: hidden;
   transition: transform 0.4s ease;
+  /* CRITICAL: Add padding to prevent images from hiding under buttons */
+  padding: 0 40px; 
 }
 
 .carousel-track img {
@@ -165,9 +205,16 @@ nav a.active {
   object-fit: cover;
   border-radius: 12px;
   transition: filter 0.3s ease;
+  flex-shrink: 0;
 }
 
 .prev, .next {
+  /* CRITICAL: Positioning for the arrows */
+  position: absolute; 
+  top: 50%; 
+  transform: translateY(-50%); 
+  z-index: 10; /* Ensures buttons are on top */
+  
   background: #d50032;
   border: none;
   color: white;
@@ -177,11 +224,22 @@ nav a.active {
   border-radius: 10px;
 }
 
+.prev {
+  left: 0; 
+}
+
+.next {
+  right: 0; 
+}
+
 .prev:hover, .next:hover { opacity: 0.8; }
+
+
 
 /* Fan Form */
 .fan-form {
-  width: 60%;
+  width: 100%;
+  max-width: 600px;
   margin: 50px auto;
   padding: 30px;
   background: #fff;
@@ -234,6 +292,7 @@ nav a.active {
   display: none;
   cursor: pointer;
   transition: 0.3s;
+  z-index: 100;
 }
 
 #scrollTop:hover { transform: scale(1.1); }
@@ -285,10 +344,6 @@ footer {
   color: #fff;
 }
 
-.dark-mode .fan-form button:hover {
-  opacity: 0.9;
-}
-
 .dark-mode .carousel {
   background: #111;
 }
@@ -297,9 +352,6 @@ footer {
 
 .dark-mode .prev,
 .dark-mode .next { background: #b30000; color: #fff; }
-
-.dark-mode .prev:hover,
-.dark-mode .next:hover { opacity: 0.8; }
 
 .dark-mode .back { background: #b30000; color: #fff; }
 
@@ -310,85 +362,5 @@ footer {
 
 @media (max-width: 768px) {
   .carousel-track img { width: 180px; height: 220px; }
-}
-
-@media (max-width: 700px) {
   .fan-form { width: 90%; padding: 20px; }
-}
-/* ----------- PAGE FADE-IN ----------- */
-body {
-  animation: fadeInPage 1s ease-out;
-}
-
-@keyframes fadeInPage {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-/* ----------- NAV UNDERLINE ANIMATION ----------- */
-nav a {
-  position: relative;
-}
-
-nav a::after {
-  content: "";
-  position: absolute;
-  bottom: -3px;
-  left: 0;
-  width: 0;
-  height: 2px;
-  background: white;
-  transition: width 0.3s;
-}
-
-nav a:hover::after {
-  width: 100%;
-}
-
-/* ---------- SCROLL REVEAL EFFECT ---------- */
-.reveal {
-  opacity: 0;
-  transform: translateY(30px);
-  transition: 0.7s ease-out;
-}
-
-.reveal.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* Make sections reveal on scroll */
-.hero,
-.card,
-.carousel,
-.fan-form {
-  position: relative;
-}
-
-.hero.reveal.visible,
-.card.reveal.visible,
-.carousel.reveal.visible,
-.fan-form.reveal.visible {
-  opacity: 1;
-}
-
-/* ---------- DARK MODE FIX FOR CARDS ---------- */
-.dark-mode .front {
-  background: #333;
-  color: #fff;
-}
-
-.dark-mode .back {
-  background: #900;
-  color: #fff;
-}
-
-/* ---------- DARK MODE FIX FOR CAROUSEL BACKGROUND ---------- */
-.dark-mode .carousel {
-  background: #111;
-}
-
-/* ---------- DARK MODE FIX FOR HERO OVERLAY ---------- */
-.dark-mode .hero::after {
-  background: rgba(0,0,0,0.7);
 }

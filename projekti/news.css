@@ -1,64 +1,101 @@
-/* Global */
+/* Global Reset and Variables */
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
 
-body {
+:root {
+  --bayern-red: #d00000;
+  --bayern-red-hover: #a30000;
+  --accent: #ffcc00;
+  --bg: #1e1e1e; 
+  --text: #fff;
+  --card-bg: #2d2d2d; /* FIX: Explicit dark card background */
+  --shadow: rgba(0,0,0,0.5);
   font-family: "Poppins", sans-serif;
-  background: var(--bg);
-  color: var(--text);
   transition: all 0.4s ease;
 }
 
-:root {
-  --bayern-red: #b50000;
-  --accent: #ffcc00;
-  --bg: #121212;
-  --text: #fff;
-  --card-bg: rgba(255,255,255,0.1);
-  --shadow: rgba(0,0,0,0.3);
-}
-a{
-  text-decoration: none;
-  color: #f8f8f8;
-  font-weight: 500;
-  margin-left: 20px;
-  text-align: left;
-}
 body.light {
   --bg: #f8f8f8;
   --text: #222;
-  --card-bg: #fff;
-  --shadow: rgba(0,0,0,0.1);
+  --card-bg: #fff; /* FIX: Explicit light card background */
+  --shadow: rgba(0,0,0,0.15);
 }
 
-/* Header */
-header {
-  text-align: center;
-  padding: 20px;
+body {
+  background: var(--bg);
+  color: var(--text);
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 15px;
+}
+
+/* Header & Navigation */
+.main-header {
   background: var(--bayern-red);
   color: white;
+  box-shadow: 0 4px 8px var(--shadow);
 }
 
-.controls {
-  margin-top: 15px;
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 15px;
 }
 
-#searchBar, #categoryFilter, #themeToggle {
-  padding: 10px;
-  border-radius: 6px;
-  border: none;
-  margin: 5px;
+.main-nav a {
+  text-decoration: none;
+  color: white;
+  font-weight: 500;
+  margin-left: 20px;
+  padding-bottom: 5px;
+  opacity: 0.9;
+  transition: opacity 0.3s;
+}
+.main-nav a:hover, .main-nav a.active {
+  opacity: 1;
+  border-bottom: 2px solid var(--accent);
+}
+
+/* Controls and Filters */
+.controls-section {
+  padding: 20px 15px;
+  text-align: center;
+}
+
+.controls-group {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+#searchBar, #categoryFilter, .theme-toggle {
+  padding: 10px 15px;
+  border-radius: 8px;
+  border: 1px solid #555;
+  margin: 5px 0;
   font-size: 1em;
+  background: var(--card-bg);
+  color: var(--text);
+  min-width: 150px;
 }
 
-#themeToggle {
+.theme-toggle {
   cursor: pointer;
   background: var(--accent);
   color: #000;
   font-weight: bold;
+  border: none;
+}
+.theme-toggle:hover {
+  opacity: 0.9;
 }
 
 /* Loader */
@@ -75,165 +112,418 @@ header {
   to { transform: rotate(360deg); }
 }
 
-/* News grid */
+/* News Grid */
+.main-news-content {
+    min-height: 50vh;
+}
 .news-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 20px;
-  padding: 30px;
-}
-.social-media {
-  margin-top: 40px;
-  padding-top: 30px;
-  border-top: 2px solid rgba(255, 255, 255, 0.3);
-}
-
-.social-links {
-  display: flex;
-  justify-content: center;
-  gap: 20px;
-  margin-top: 20px;
-}
-
-.social-link {
-  background: white;
-  color: #b30000;
-  padding: 12px 25px;
-  text-decoration: none;
-  border-radius: 25px;
-  font-weight: bold;
-  transition: all 0.3s ease;
-}
-
-.social-link:hover {
-  background: #ffcccc;
-  transform: scale(1.05);
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 30px;
+  padding: 30px 0;
 }
 
 .news-card {
   background: var(--card-bg);
-  border-radius: 10px;
+  border-radius: 12px;
   box-shadow: 0 5px 15px var(--shadow);
   overflow: hidden;
   cursor: pointer;
-  opacity: 0;
-  animation: fadeIn 0.6s forwards;
+  
+  /* CRITICAL FIXES FOR VISIBILITY: */
+  opacity: 1; /* ENSURE CARD IS NOT TRANSPARENT */
+  animation: none; /* DISABLE FADE IN IF IT'S CAUSING ISSUES, JS will apply 'forwards' */
+  
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+  display: flex;
+  flex-direction: column;
 }
 .news-card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 8px 20px var(--shadow);
+  transform: translateY(-8px);
+  box-shadow: 0 10px 25px var(--shadow);
 }
 
 .news-card img {
   width: 100%;
-  height: 180px;
+  height: 200px;
   object-fit: cover;
+  /* FIX: Ensure image is not somehow transparent/hidden */
+  opacity: 1; 
+  display: block;
 }
 
 .news-content {
   padding: 15px;
+  flex-grow: 1;
 }
 .news-content h2 {
-  font-size: 1.1rem;
-  margin-bottom: 6px;
+  font-size: 1.2rem;
+  margin-bottom: 8px;
+  color: var(--bayern-red);
 }
 .news-content p {
-  font-size: 0.9rem;
+  font-size: 0.95rem;
   color: var(--text);
-  opacity: 0.8;
+  opacity: 0.9;
 }
-@keyframes fadeIn {
-  to { opacity: 1; }
+.category-tag {
+    display: inline-block;
+    background: var(--bayern-red);
+    color: white;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+/* Add/Modify these styles in your news.css file */
+
+/* 1. Enhanced Form Section Background */
+.form-section {
+  padding: 40px 15px; /* Increased padding */
+  border-top: 5px solid var(--bayern-red); /* Stronger visual separation */
+  background: var(--card-bg); /* Use card background for contrast */
+  box-shadow: 0 0 20px var(--shadow); /* Add depth */
+  border-radius: 10px;
+  margin-top: 30px;
+}
+/* Ensure light mode contrast */
+body.light .form-section {
+    background: #f0f0f0;
+    border-color: var(--bayern-red);
 }
 
-@keyframes zoomIn {
-  from { transform: scale(0.9); opacity: 0; }
-  to { transform: scale(1); opacity: 1; }
-}
-
-/* Footer */
-footer {
+.form-title {
   text-align: center;
-  padding: 15px;
-  background: var(--bayern-red);
-  color: white;
-  margin-top: auto;
+  margin-bottom: 30px; /* Increased spacing */
+  color: var(--bayern-red);
+  font-size: 2em;
 }
 
-#img1{
-  margin-left: 700px;
-  height: 300px;
-  margin-bottom: 300px;
-  
+/* 2. Grid Layout for Form Inputs */
+.form-grid-layout {
+  width: 100%;
+  max-width: 800px; /* Wider form for better two-column layout */
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* Two columns for title and category */
+  gap: 25px 20px; /* Increased gap */
 }
-#img1:hover{
-    opacity: 0.7;
-  transition: 0.3;
+
+/* Ensure full-width elements span both columns */
+.full-width {
+    grid-column: span 2;
 }
-.news-form {
-  width: 80%;
-  max-width: 600px;
-  margin: 20px auto;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
+
+/* 3. Input and Label Styles */
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    font-weight: 600;
+    margin-bottom: 5px;
+    color: var(--text); /* Explicit color for labels */
+    opacity: 0.9;
+}
+body.light .form-group label {
+    color: var(--text); /* Using the standard text color in light mode */
 }
 
 .news-form input,
 .news-form select,
 .news-form textarea {
-  padding: 10px;
+  padding: 12px;
   border-radius: 8px;
-  border: 2px solid #ddd;
+  border: 1px solid #777; /* Softer border */
   font-size: 1rem;
+  background: var(--bg);
+  color: var(--text);
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.news-form input:focus,
+.news-form select:focus,
+.news-form textarea:focus {
+    border-color: var(--bayern-red);
+    box-shadow: 0 0 5px rgba(208, 0, 0, 0.5);
+    outline: none;
+}
+body.light .news-form input, body.light .news-form select, body.light .news-form textarea {
+    border-color: #ccc;
+    background: #fff;
+    color: #222;
+}
+
+
+/* 4. Submit Button Enhancement */
+.submit-btn {
+  background: var(--bayern-red);
+  color: white;
+  padding: 16px; /* Larger button */
+  border-radius: 10px; /* Softer corners */
+  border: none;
+  font-size: 1.2rem; /* Larger text */
+  cursor: pointer;
+  transition: background 0.3s, transform 0.1s;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+.submit-btn:hover {
+  background: var(--bayern-red-hover);
+  transform: translateY(-2px); /* Slight lift on hover */
+}
+
+/* 5. Image Preview Adjustments */
+.image-preview-wrap {
+    padding: 15px 0 0;
+}
+.image-preview {
+    border: 3px solid var(--bayern-red); /* More prominent border */
+    box-shadow: 0 4px 10px var(--shadow);
+}
+
+
+/* 6. Responsive Adjustment for the Form Grid */
+@media (max-width: 768px) {
+    .form-grid-layout {
+        grid-template-columns: 1fr; /* Single column on mobile */
+    }
+    .full-width {
+        grid-column: span 1;
+    }
+}
+/* Re-enabling fadeIn for better appearance, but setting default opacity to 1 */
+@keyframes fadeIn {
+  to { opacity: 1; }
+}
+
+
+/* Form Styling */
+.form-section {
+  padding: 30px 15px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(0, 0, 0, 0.1);
+}
+body.light .form-section {
+    background: #eee;
+    border: none;
+}
+
+.form-title {
+  text-align: center;
+  margin-bottom: 25px;
+  color: var(--bayern-red);
+}
+
+.news-form {
+  width: 100%;
+  max-width: 700px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+}
+.full-width {
+    grid-column: span 2;
 }
 
 .news-form button {
+    grid-column: span 2;
+}
+
+.news-form input,
+.news-form select,
+.news-form textarea {
+  padding: 12px;
+  border-radius: 8px;
+  border: 2px solid #555;
+  font-size: 1rem;
+  background: var(--bg);
+  color: var(--text);
+}
+body.light .news-form input, body.light .news-form select, body.light .news-form textarea {
+    border-color: #ddd;
+    background: #fff;
+    color: #222;
+}
+
+.submit-btn {
   background: var(--bayern-red);
   color: white;
-  padding: 12px;
+  padding: 14px;
   border-radius: 8px;
   border: none;
   font-size: 1.1rem;
   cursor: pointer;
   transition: 0.3s;
+  font-weight: bold;
 }
-
-.news-form button:hover {
-  background: #7a0000;
+.submit-btn:hover {
+  background: var(--bayern-red-hover);
 }
 
 .error-msg {
   color: #ff4b4b;
   font-weight: bold;
   text-align: center;
-  display: none;
+  grid-column: span 2;
+  padding: 10px 0;
 }
+
 .counter {
-  font-size: 0.9rem;
-  margin-top: -8px;
+  font-size: 0.85rem;
+  margin-top: 5px;
   text-align: right;
   opacity: 0.7;
 }
-
 .counter.invalid {
   color: #ff3e3e;
   font-weight: bold;
 }
-
 .image-preview-wrap {
   width: 100%;
-  display: flex;
-  justify-content: center;
+  text-align: center;
+}
+.image-preview {
+  margin: 10px auto;
+  width: 100%;
+  max-width: 250px;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 2px solid var(--bayern-red);
 }
 
-.image-preview {
-  width: 180px;
-  height: 120px;
-  object-fit: cover;
-  margin: 8px 0;
-  border-radius: 8px;
-  display: none;
-  border: 2px solid #ccc;
+/* Modal Styling (Ensuring high z-index) */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.85);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; /* Ensure this is high enough */
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+.modal.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+.modal-content {
+  background: var(--card-bg);
+  padding: 30px;
+  border-radius: 10px;
+  max-width: 600px;
+  width: 90%;
+  position: relative;
+  transform: translateY(-50px);
+  transition: transform 0.3s ease;
+}
+.modal.visible .modal-content {
+    transform: translateY(0);
+}
+
+/* ... (rest of the modal styles) ... */
+
+.close-button {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  background: none;
+  border: none;
+  font-size: 2em;
+  color: var(--text);
+  cursor: pointer;
+  opacity: 0.7;
+}
+
+.full-article-link {
+    display: block;
+    text-align: center;
+    padding: 10px;
+    background: var(--bayern-red);
+    color: white !important;
+    border-radius: 5px;
+    margin-top: 20px;
+}
+
+/* Social Media Section */
+.social-media {
+  text-align: center;
+  padding: 40px 15px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  margin-top: 30px;
+}
+.social-media h2 {
+    color: var(--bayern-red);
+    margin-bottom: 20px;
+}
+.social-links {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.social-link {
+  color: white !important;
+  padding: 12px 25px;
+  text-decoration: none;
+  border-radius: 25px;
+  font-weight: bold;
+  transition: all 0.3s ease;
+  margin: 0;
+}
+.social-link:hover {
+  opacity: 0.9;
+  transform: scale(1.05);
+}
+
+/* Specific Social Colors */
+.facebook-color { background: #3b5998; }
+.twitter-color { background: #1da1f2; }
+.instagram-color { background: #e1306c; }
+.youtube-color { background: #ff0000; }
+
+
+/* Footer */
+footer {
+  text-align: center;
+  padding: 18px;
+  background: var(--bayern-red);
+  color: white;
+  margin-top: 40px;
+  font-weight: 500;
+}
+
+/* Media Queries */
+@media (max-width: 768px) {
+  .header-content {
+    flex-direction: column;
+    text-align: center;
+  }
+  .main-nav {
+    margin-top: 10px;
+  }
+  .main-nav a {
+    margin: 0 10px;
+  }
+  .news-form {
+    grid-template-columns: 1fr;
+  }
+  .full-width, .news-form button {
+      grid-column: span 1;
+  }
+  .controls-group {
+    flex-direction: column;
+    align-items: stretch;
+  }
 }

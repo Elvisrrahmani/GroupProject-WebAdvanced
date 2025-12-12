@@ -1,3 +1,7 @@
+// Set the current year in the footer
+document.getElementById("year").textContent = new Date().getFullYear();
+
+// --- DOM ELEMENTS (Cleaned up) ---
 const container = document.getElementById('newsContainer');
 const loader = document.getElementById('loader');
 const searchBar = document.getElementById('searchBar');
@@ -11,247 +15,180 @@ const modalSummary = document.getElementById('modalSummary');
 const modalImg = document.getElementById('modalImg');
 const modalLink = document.getElementById('modalLink');
 
-// --- THEME TOGGLE ---
+// --- MOCK DATA (Initial Articles) ---
+// news.js file
+
+const NEWS_DATA = [
+    {
+        title: "Bayern crush rivals with 4–1 win at Allianz Arena",
+        category: "bundesliga",
+        // Replace this placeholder with one of your actual image paths
+        img: "images/OIP.webp", // Replace with: "images/image_arena.jpg"
+        summary: "Bayern Munich continued their strong Bundesliga form with a commanding home victory over Borussia Dortmund.",
+        link: "https://www.bavarianfootballworks.com/"
+    },
+    {
+        title: "Olise's Leadership Key in Latest Win",
+        category: "club",
+        // Replace this placeholder with your other actual image path
+        img: "images/olise.jpg", // Replace with: "images/image_kimmich.jpg"
+        summary: "Olise delivered a masterclass performance, cementing his role as the team's engine.",
+        link: "https://www.example.com/kimmich"
+    },
+    {
+        title: "Konrad Laimer signs new 3-year Bayern deal",
+        category: "transfers",
+        // Keep this as a placeholder, or replace with a third image if you have one
+        img: "images/laimer.jpg", // Replace with: "images/image_laimer.jpg"
+        summary: "Bayern confirm Laimer’s contract extension following stellar midfield performances this season.",
+        link: "https://www.bavarianfootballworks.com/"
+    }
+];
+
+// --- GLOBAL NEWS ARRAY INITIALIZATION (THE FIX) ---
+// 1. Load saved news from Local Storage.
+let savedNews = JSON.parse(localStorage.getItem("userNews")) || [];
+
+// 2. The main array, combining user news (first, to appear as newest) and mock data.
+let allNews = [...savedNews, ...NEWS_DATA];
+
+// --- THEME TOGGLE (Vanilla JS) ---
+const updateTheme = (isLight) => {
+    document.body.classList.toggle('light', isLight);
+    themeToggle.textContent = isLight ? '☀️ Light Mode' : '🌙 Dark Mode';
+    localStorage.setItem('theme', isLight ? 'light' : 'dark');
+};
+
 if (localStorage.getItem('theme') === 'light') {
-  document.body.classList.add('light');
-  themeToggle.textContent = '☀️ Light';
+    updateTheme(true);
+} else {
+    updateTheme(false); 
 }
 
 themeToggle.addEventListener('click', () => {
-  document.body.classList.toggle('light');
-  const isLight = document.body.classList.contains('light');
-  themeToggle.textContent = isLight ? '☀️ Light' : '🌙 Dark';
-  localStorage.setItem('theme', isLight ? 'light' : 'dark');
+    const isLight = !document.body.classList.contains('light');
+    updateTheme(isLight);
 });
-
-// --- FETCH NEWS (mocked, can be replaced with real API) ---
-async function fetchNews() {
-  try {
-    // Example: Replace with a real API endpoint later
-    // const res = await fetch('https://newsapi.org/v2/everything?q=Bayern%20Munich&apiKey=YOUR_KEY');
-    // const data = await res.json();
-    // return data.articles;
-
-    // Mock data
-    return [
-      {
-        title: "Bayern crush rivals with 4–1 win at Allianz Arena",
-        category: "club",
-        img: "images/OIP.webp",
-        summary: "Bayern Munich continued their strong Bundesliga form with a commanding home victory.",
-        link: "https://www.bavarianfootballworks.com/"
-      },
-      {
-        title: "Harry Kane scores hat-trick as Bayern dominate",
-        category: "champions-league",
-          img: "images/OIP.webp2.jfif",
-        summary: "The English striker continued his impressive form in European competition.",
-        link: "https://www.bavarianfootballworks.com/"
-      },
-      {
-        title: "Konrad Laimer signs new 3-year Bayern deal",
-        category: "transfers",
-        img: "images/OIP.webp3.jfif",
-        summary: "Bayern confirm Laimer’s contract extension following stellar performances.",
-        link: "https://www.bavarianfootballworks.com/"
-      }
-    ];
-  } catch (err) {
-    console.error(err);
-    return [];
-  }
-}
 
 // --- RENDER NEWS ---
 function renderNews(news) {
-  container.innerHTML = "";
-  if (news.length === 0) {
-    container.innerHTML = `<p style="text-align:center;opacity:0.7;">No news found 😕</p>`;
-    return;
-  }
+    container.innerHTML = "";
+    if (news.length === 0) {
+        container.innerHTML = `<p style="text-align:center;opacity:0.7;padding:30px;">No news found matching your criteria 😕</p>`;
+        return;
+    }
 
-  news.forEach((item, i) => {
-    const card = document.createElement('div');
-    card.className = 'news-card';
-    card.style.animationDelay = `${i * 0.1}s`;
-    card.innerHTML = `
-      <img src="${item.img}" alt="${item.title}">
-      <div class="news-content">
-        <h2>${item.title}</h2>
-        <p>${item.summary}</p>
-      </div>
-    `;
-    card.addEventListener('click', () => openModal(item));
-    container.appendChild(card);
-  });
+    news.forEach((item, i) => {
+        const card = document.createElement('div');
+        card.className = 'news-card';
+        card.style.animationDelay = `${i * 0.05}s`;
+        card.innerHTML = `
+            <img src="${item.img}" alt="${item.title}">
+            <div class="news-content">
+                <span class="category-tag">${item.category.toUpperCase()}</span>
+                <h2>${item.title}</h2>
+                <p>${item.summary}</p>
+            </div>
+        `;
+        card.addEventListener('click', () => openModal(item));
+        container.appendChild(card);
+    });
 }
 
 // --- SEARCH & FILTER ---
-function applyFilters(allNews) {
-  const query = searchBar.value.toLowerCase();
-  const cat = categoryFilter.value;
-  return allNews.filter(item => {
-    const matchText = item.title.toLowerCase().includes(query) || item.summary.toLowerCase().includes(query);
-    const matchCat = cat === 'all' || item.category === cat;
-    return matchText && matchCat;
-  });
+function applyFilters() {
+    const query = searchBar.value.toLowerCase();
+    const cat = categoryFilter.value;
+
+    const filtered = allNews.filter(item => {
+        const matchText = item.title.toLowerCase().includes(query) || item.summary.toLowerCase().includes(query);
+        const matchCat = cat === 'all' || item.category === cat || (cat === 'user' && item.isUser);
+        return matchText && matchCat;
+    });
+    
+    // Sort newest items first (user submitted news is tagged with isUser: true)
+    // The filter function handles the sorting logic based on the isUser flag
+    const sorted = filtered.sort((a, b) => (b.isUser === true) - (a.isUser === true)); 
+
+    renderNews(sorted);
 }
 
-// --- INIT ---
-(async () => {
-  loader.style.display = 'block';
-  const allNews = await fetchNews();
-  loader.style.display = 'none';
-  renderNews(allNews);
+// --- MODAL FUNCTIONS ---
+function openModal(item) {
+    modalImg.src = item.img;
+    modalImg.alt = item.title;
+    modalTitle.textContent = item.title;
+    modalSummary.textContent = item.summary;
+    modalLink.href = item.link || "#"; 
+    modal.classList.add('visible');
+    document.body.style.overflow = 'hidden'; 
+}
 
-  searchBar.addEventListener('input', () => renderNews(applyFilters(allNews)));
-  categoryFilter.addEventListener('change', () => renderNews(applyFilters(allNews)));
-})();
+function closeModalHandler() {
+    modal.classList.remove('visible');
+    document.body.style.overflow = 'auto';
+}
 
-
-// =======================================================
-// 🧾 USER NEWS FORM (with REGEX + jQuery + array functions)
-// =======================================================
-
-let userNews = []; // will store user-submitted posts
-
-$("#newsForm").on("submit", function (e) {
-    e.preventDefault();
-
-    const title = $("#formTitle").val().trim();
-    const category = $("#formCategory").val();
-    const img = $("#formImg").val().trim();
-    const summary = $("#formSummary").val().trim();
-
-    const error = $("#formError");
-
-    // --- REGEX VALIDATION ---
-    const titleRegex = /^[A-Za-z0-9\s\-'!?,.]{5,50}$/;
-    const urlRegex = /^https?:\/\/.*\.(jpg|jpeg|png|webp|gif)$/i;
-    const summaryRegex = /^.{10,300}$/;
-
-    // VALIDATION CHECKS
-    if (!titleRegex.test(title)) {
-        return showError("✖ Title must be 5–50 characters and contain valid characters.");
+closeModal.addEventListener('click', closeModalHandler);
+modal.addEventListener('click', (e) => {
+    if (e.target === modal) {
+        closeModalHandler();
     }
-    if (!summaryRegex.test(summary)) {
-        return showError("✖ Summary must be 10–300 characters.");
-    }
-    if (img !== "" && !urlRegex.test(img)) {
-        return showError("✖ Image URL must end with .jpg, .png, .webp, .gif");
-    }
-    if (!category) {
-        return showError("✖ Please select a category.");
-    }
-
-    error.hide();
-
-    // --- CREATE NEWS OBJECT ---
-    const newPost = {
-        title,
-        category,
-        img: img || "images/OIP.webp", // fallback image
-        summary,
-        link: "#"
-    };
-
-    // --- ADD NEWS TO ARRAY ---
-    userNews.push(newPost);
-
-    // --- MERGE WITH EXISTING NEWS ---
-    const combinedNews = [...userNews, ...allNews];
-
-    // --- SORT newest first ---
-    combinedNews.reverse();
-
-    // --- RENDER UPDATED LIST ---
-    renderNews(combinedNews);
-
-    // --- CLEAR FORM ---
-    $("#newsForm")[0].reset();
 });
 
-// Helper: show error text
-function showError(msg) {
-    $("#formError").text(msg).slideDown();
-}
+
+// --- INITIALIZATION (Ensure data is rendered after load) ---
+loader.style.display = 'block';
+setTimeout(() => { // Simulate API loading time
+    loader.style.display = 'none';
+    applyFilters(); // Initial render using combined data
+}, 500);
+
+searchBar.addEventListener('input', applyFilters);
+categoryFilter.addEventListener('change', applyFilters);
+
 // =======================================================
-// 1️⃣ LOCAL STORAGE SAVE / LOAD SYSTEM
+// 🧾 USER NEWS FORM (using jQuery)
 // =======================================================
 
-// load saved news
-let savedNews = JSON.parse(localStorage.getItem("userNews")) || [];
-
-// combine user + built-in news
-let allNews = [...savedNews, ...NEWS_DATA];
-
-// render initial
-renderNews(allNews);
-
-// save to localStorage
 function saveNews() {
     localStorage.setItem("userNews", JSON.stringify(savedNews));
 }
 
+function showError(msg) {
+    $("#formError").text(msg).slideDown();
+}
 
-
-// =======================================================
-// 2️⃣ LIVE IMAGE PREVIEW
-// =======================================================
-
+// LIVE IMAGE PREVIEW (jQuery)
 $("#formImg").on("input", function () {
     const url = $(this).val().trim();
-    const urlRegex = /^https?:\/\/.*\.(jpg|jpeg|png|webp|gif)$/i;
+    const urlRegex = /^https?:\/\/.+\.(jpg|jpeg|png|webp|gif)$/i;
 
     if (urlRegex.test(url)) {
-        $("#imgPreview").attr("src", url).fadeIn(200);
+        $("#imgPreview").attr("src", url).slideDown(200);
     } else {
-        $("#imgPreview").fadeOut(200);
+        $("#imgPreview").slideUp(200);
     }
 });
 
-
-
-// =======================================================
-// 3️⃣ CHARACTER COUNTERS (with regex validation)
-// =======================================================
-
-// title counter
+// CHARACTER COUNTERS (jQuery)
 $("#formTitle").on("input", function () {
     const text = $(this).val();
     const count = text.length;
     const max = 50;
-
     $("#titleCount").text(`${count} / ${max}`);
-
-    if (count < 5 || count > max) {
-        $("#titleCount").addClass("invalid");
-    } else {
-        $("#titleCount").removeClass("invalid");
-    }
+    $("#titleCount").toggleClass("invalid", count < 5 || count > max);
 });
 
-// summary counter
 $("#formSummary").on("input", function () {
     const text = $(this).val();
     const count = text.length;
     const max = 300;
-
     $("#summaryCount").text(`${count} / ${max}`);
-
-    if (count < 10 || count > max) {
-        $("#summaryCount").addClass("invalid");
-    } else {
-        $("#summaryCount").removeClass("invalid");
-    }
+    $("#summaryCount").toggleClass("invalid", count < 10 || count > max);
 });
 
-
-
-// =======================================================
-// EXTENDED FORM SUBMISSION (LocalStorage + new array merging)
-// =======================================================
-
+// FORM SUBMISSION (jQuery)
 $("#newsForm").on("submit", function (e) {
     e.preventDefault();
 
@@ -259,47 +196,41 @@ $("#newsForm").on("submit", function (e) {
     const category = $("#formCategory").val();
     const img = $("#formImg").val().trim();
     const summary = $("#formSummary").val().trim();
-    const error = $("#formError");
-
+    
     // Regex rules
     const titleRegex = /^[A-Za-z0-9\s\-'!?,.]{5,50}$/;
-    const urlRegex = /^https?:\/\/.*\.(jpg|jpeg|png|webp|gif)$/i;
+    const urlRegex = /^https?:\/\/.+\.(jpg|jpeg|png|webp|gif)$/i;
     const summaryRegex = /^.{10,300}$/;
 
-    if (!titleRegex.test(title)) return showError("✖ Invalid title.");
+    // VALIDATION
+    if (!titleRegex.test(title)) return showError("✖ Title must be 5–50 characters.");
     if (!summaryRegex.test(summary)) return showError("✖ Summary must be 10–300 characters.");
     if (img !== "" && !urlRegex.test(img)) return showError("✖ Invalid image URL.");
     if (!category) return showError("✖ Pick a category.");
 
-    error.hide();
+    $("#formError").slideUp();
 
+    // Create News Object
     const newPost = {
         title,
-        category,
-        img: img || "images/OIP.webp",
+        category: category,
+        img: img || "images/default-bayern.jpg", 
         summary,
-        link: "#"
+        link: "#", 
+        isUser: true, 
     };
 
-    // save to memory + storage
-    savedNews.push(newPost);
+    // Save to memory + storage (unshift adds to the beginning, making it the newest)
+    savedNews.unshift(newPost);
     saveNews();
 
-    // re-render
-    allNews = [...savedNews, ...NEWS_DATA].reverse();
-    renderNews(allNews);
+    // Re-render: Rebuild the master array and re-filter/sort
+    allNews = [...savedNews, ...NEWS_DATA];
+    applyFilters();
 
-    // clear form
+    // Clear form and counters
     $("#newsForm")[0].reset();
-    $("#imgPreview").hide();
-    $("#titleCount").text("0 / 50");
-    $("#summaryCount").text("0 / 300");
+    $("#imgPreview").slideUp();
+    $("#titleCount").text("0 / 50").removeClass("invalid");
+    $("#summaryCount").text("0 / 300").removeClass("invalid");
 });
-
-
-
-
-// helper
-function showError(msg) {
-    $("#formError").text(msg).slideDown();
-}

@@ -1,154 +1,171 @@
-// Vendos vitin aktual në footer
+// --- Initial Setup ---
+
+// Set the current year in the footer
 document.getElementById("year").textContent = new Date().getFullYear();
 
-// Efekt fade kur elementet shfaqen në ekran
-const faders = document.querySelectorAll(".fade");
-const options = { threshold: 0.2 };
+// --- Intersection Observer (Fade-In Effect) ---
 
-const appearOnScroll = new IntersectionObserver(function(entries, observer){
-  entries.forEach(entry => {
-    if(!entry.isIntersecting) return;
-    entry.target.classList.add("show");
-    observer.unobserve(entry.target);
-  });
-}, options);
+const faders = document.querySelectorAll(".fade");
+const appearanceOptions = {
+    threshold: 0.1, // Element is visible enough when 10% is in view
+    rootMargin: "0px 0px -50px 0px" 
+};
+
+const appearOnScroll = new IntersectionObserver((entries, observer) => {
+    entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add("show");
+        observer.unobserve(entry.target);
+    });
+}, appearanceOptions);
 
 faders.forEach(fade => {
-  appearOnScroll.observe(fade);
+    appearOnScroll.observe(fade);
 });
-// darkmode.js
+
+// --- Dark Mode Logic ---
 
 document.addEventListener("DOMContentLoaded", () => {
     const toggle = document.getElementById("darkModeToggle");
     const body = document.body;
-
-    // Load saved mode from localStorage
     const savedMode = localStorage.getItem("darkMode");
 
-    if (savedMode === "enabled") {
+    if (!toggle) return; // Exit if the button isn't found
+
+    const enableDarkMode = () => {
         body.classList.add("dark-mode");
-        if (toggle) toggle.textContent = "☀️ Light Mode";
+        localStorage.setItem("darkMode", "enabled");
+        toggle.textContent = "☀️ Light Mode";
+    };
+
+    const disableDarkMode = () => {
+        body.classList.remove("dark-mode");
+        localStorage.setItem("darkMode", "disabled");
+        toggle.textContent = "🌙 Dark Mode";
+    };
+
+    // Load saved mode
+    if (savedMode === "enabled") {
+        enableDarkMode();
+    } else {
+        // Ensure the button text is correct on initial load
+        disableDarkMode();
     }
 
     // Toggle dark mode on click
-    if (toggle) {
-        toggle.addEventListener("click", () => {
-            body.classList.toggle("dark-mode");
-
-            if (body.classList.contains("dark-mode")) {
-                localStorage.setItem("darkMode", "enabled");
-                toggle.textContent = "☀️ Light Mode";
-            } else {
-                localStorage.setItem("darkMode", "disabled");
-                toggle.textContent = "🌙 Dark Mode";
-            }
-        });
-    }
+    toggle.addEventListener("click", () => {
+        if (body.classList.contains("dark-mode")) {
+            disableDarkMode();
+        } else {
+            enableDarkMode();
+        }
+    });
 });
-const elements = document.querySelectorAll('.fade-in');
 
-function checkFadeIn() {
-  elements.forEach(el => {
-    const rect = el.getBoundingClientRect().top;
-    if (rect < window.innerHeight - 50) {
-      el.classList.add('visible');
-    }
-  });
-}
+// --- Back-to-Top Button ---
 
-window.addEventListener('scroll', checkFadeIn);
-window.addEventListener('load', checkFadeIn);
-
-// Butoni "Kthehu lart"
 const topBtn = document.getElementById("topBtn");
 
-window.addEventListener("scroll", () => {
-  if (window.scrollY > 400) {
-    topBtn.style.display = "block";
-  } else {
-    topBtn.style.display = "none";
-  }
-});
+if (topBtn) {
+    window.addEventListener("scroll", () => {
+        if (window.scrollY > 400) {
+            topBtn.style.display = "block";
+        } else {
+            topBtn.style.display = "none";
+        }
+    });
 
-topBtn.addEventListener("click", () => {
-  window.scrollTo({ top: 0, behavior: "smooth" });
-});
-
-// jQuery (Load from CDN automatically if not included)
-if (!window.jQuery) {
-  let script = document.createElement("script");
-  script.src = "https://code.jquery.com/jquery-3.7.1.min.js";
-  document.head.appendChild(script);
+    topBtn.addEventListener("click", () => {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    });
 }
 
-// Bayern player list for validation (ARRAY + CONDITIONALS)
+
+// --- JQUERY FORM VALIDATION ---
+
+// This section requires the jQuery library loaded in the HTML file.
+
+// List of valid Bayern players (lowercase and without spaces/accents)
 const validPlayers = [
-  "Musiala", "Kimmich", "Neuer", "Kane", "Müller", "Davies", "Sane"
+    "musiala", "kimmich", "neuer", "kane", "muller", "davies", "sane",
+    "goretzka", "upamecano", "de ligt", "coman", "gnabry", "tel", "mazraoui"
 ];
 
 // Regex rules
 const nameRegex = /^[A-Za-z\s]{3,}$/;
 const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z]+\.[A-Za-z]{2,}$/;
 
-// Form logic
-$(document).on("submit", "#feedbackForm", function (e) {
-  e.preventDefault();
+// Wait for jQuery to be fully loaded
+$(document).ready(function() {
+    // Form logic
+    $("#feedbackForm").on("submit", function (e) {
+        e.preventDefault();
 
-  let name = $("#fullName").val().trim();
-  let email = $("#email").val().trim();
-  let player = $("#player").val().trim();
-  let message = $("#message").val().trim();
+        let nameInput = $("#fullName");
+        let emailInput = $("#email");
+        let playerInput = $("#player");
+        let messageInput = $("#message");
 
-  let isValid = true;
+        let name = nameInput.val().trim();
+        let email = emailInput.val().trim();
+        let player = playerInput.val().trim();
+        let message = messageInput.val().trim();
 
-  // Name validation + input manipulation
-  if (!nameRegex.test(name)) {
-    $("#fullName").next(".error").text("Name must be at least 3 letters.");
-    isValid = false;
-  } else {
-    // Capitalize name fully
-    name = name.toUpperCase();
-    $("#fullName").val(name);
-    $("#fullName").next(".error").text("");
-  }
+        let isValid = true;
+        const error = (input, msg) => {
+            input.next(".error").text(msg);
+            isValid = false;
+        };
+        const clearError = (input) => input.next(".error").text("");
 
-  // Email regex
-  if (!emailRegex.test(email)) {
-    $("#email").next(".error").text("Invalid email format.");
-    isValid = false;
-  } else {
-    $("#email").next(".error").text("");
-  }
 
-  // Player check (array + conditional)
-  if (!validPlayers.includes(player)) {
-    $("#player").next(".error").text("Player not found in Bayern squad!");
-    isValid = false;
-  } else {
-    $("#player").next(".error").text("");
-  }
+        // 1. Name validation
+        if (!nameRegex.test(name)) {
+            error(nameInput, "Name must be at least 3 letters.");
+        } else {
+            nameInput.val(name.toUpperCase()); 
+            clearError(nameInput);
+        }
 
-  // Message length
-  if (message.length < 5) {
-    $("#message").next(".error").text("Message must be 5+ characters.");
-    isValid = false;
-  } else {
-    $("#message").next(".error").text("");
-  }
+        // 2. Email validation
+        if (!emailRegex.test(email)) {
+            error(emailInput, "Invalid email format.");
+        } else {
+            clearError(emailInput);
+        }
 
-  // Final success
-  if (isValid) {
-    $("#successMsg").fadeIn();
-    setTimeout(() => $("#successMsg").fadeOut(), 2000);
+        // 3. Player check
+        const standardizedPlayer = player.toLowerCase().replace(/\s/g, ''); 
+        
+        if (!validPlayers.includes(standardizedPlayer)) {
+            error(playerInput, "Player not found in a reasonable Bayern squad list!");
+        } else {
+            clearError(playerInput);
+        }
 
-    // Store feedback (array example)
-    const feedback = {
-      name,
-      email,
-      player,
-      message
-    };
+        // 4. Message validation
+        if (message.length < 5) {
+            error(messageInput, "Message must be 5+ characters.");
+        } else {
+            clearError(messageInput);
+        }
 
-    console.log("Saved Feedback:", feedback);
-  }
+        // Final success
+        if (isValid) {
+            $("#successMsg").fadeIn();
+            setTimeout(() => $("#successMsg").fadeOut(), 2000);
+            
+            // Clear form after successful submission
+            $("#feedbackForm")[0].reset();
+            
+            const feedback = {
+                name: nameInput.val(),
+                email: email,
+                player: playerInput.val(),
+                message: message
+            };
+
+            console.log("Saved Feedback:", feedback);
+        }
+    });
 });
